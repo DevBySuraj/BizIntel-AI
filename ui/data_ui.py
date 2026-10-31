@@ -38,45 +38,59 @@ def find_data_file(filename):
 
 def render_data():
     with st.container(border=True):
-        left, right = st.columns([2, 1])
+        left, right = st.columns([3, 2])
         with left:
+            st.markdown("#### Upload Dataset")
             key = f"upload_csv_{st.session_state.get('upload_epoch', 0)}"
-            upload = st.file_uploader("Choose a CSV or Excel file", type=["csv", "xlsx"], max_upload_size=10, key=key,
-                                      on_change=upload_changed, args=(key,),
-                                      help="Comma-separated UTF-8 (.csv) or Excel workbook (.xlsx). Up to 10 MiB. Your upload remains in this session.")
+            upload = st.file_uploader(
+                "Choose a CSV or Excel file",
+                type=["csv", "xlsx"],
+                max_upload_size=10,
+                key=key,
+                on_change=upload_changed,
+                args=(key,),
+                help="Comma-separated UTF-8 (.csv) or Excel workbook (.xlsx). Up to 10 MiB. Data stays local in your session."
+            )
             if upload is not None and install_dataset(upload.name, upload.getvalue()):
                 st.rerun()
         with right:
-            st.write("Try fictional sales data")
-            if st.button("Use sample data", type="primary", key="use_sample"):
-                path = find_data_file("sample_sales.csv")
-                install_dataset(path.name, path.read_bytes(), force=True, currency="INR")
-                st.session_state["upload_epoch"] = st.session_state.get("upload_epoch", 0) + 1
-                st.rerun()
-            if st.button("Use extended demo", key="use_demo"):
-                install_dataset("fictional_extended_sales.csv", extended_demo(), force=True, currency="INR")
-                st.session_state["upload_epoch"] = st.session_state.get("upload_epoch", 0) + 1
-                st.rerun()
-            st.caption("Small sample: 8 rows. Extended demo: 18 months and 30 customers for model demonstrations.")
+            st.markdown("#### Try Demo Datasets")
+            st.caption("Fictional sales datasets pre-formatted for rapid evaluation.")
+            col_s1, col_s2 = st.columns(2)
+            with col_s1:
+                if st.button("Use sample data", type="primary", key="use_sample", help="Standard 8-row sample dataset"):
+                    path = find_data_file("sample_sales.csv")
+                    install_dataset(path.name, path.read_bytes(), force=True, currency="INR")
+                    st.session_state["upload_epoch"] = st.session_state.get("upload_epoch", 0) + 1
+                    st.rerun()
+            with col_s2:
+                if st.button("Use extended demo", key="use_demo", help="18-month time series with 30 customers"):
+                    install_dataset("fictional_extended_sales.csv", extended_demo(), force=True, currency="INR")
+                    st.session_state["upload_epoch"] = st.session_state.get("upload_epoch", 0) + 1
+                    st.rerun()
             example = find_data_file("sample_sales_catalogue.csv")
-            st.download_button("Download 20-field CSV example", example.read_bytes(), example.name, "text/csv")
+            st.download_button("Download 20-field CSV template", example.read_bytes(), example.name, "text/csv")
+
     if st.session_state.get("upload_error"):
         st.error(st.session_state["upload_error"])
+
     ds = st.session_state.get("dataset")
     if ds is None:
-        st.info("Upload a CSV or use fictional data. Analysis starts automatically; customization is optional.")
+        st.info("Upload a CSV/Excel file or click 'Use sample data' above to start automated analysis.")
         return
+
     supported = analysis_columns(ds["working"], ds["settings"]["mapping"])
     extras = [c for c in ds["working"] if c not in supported]
     analysis = analyze_column_semantics(ds["working"], ds["settings"]["mapping"])
 
     st.success(f"Dataset loaded. {len(supported)} columns mapped to the 20-field catalogue · {len(extras)} auxiliary columns preserved.")
+
     t1, t2 = st.tabs([
         f"Active Business Fields ({len(analysis['active'])})",
-        f"Preserved Auxiliary Attributes ({len(analysis['auxiliary']) + len(analysis['suggested'])})"
+        f"Preserved Auxiliary Attributes ({len(analysis['suggested']) + len(analysis['auxiliary'])})"
     ])
     with t1:
-        st.caption("These fields are mapped to the 20-field business catalogue and drive your KPIs, dashboard charts, forecasts, and reports.")
+        st.caption("Mapped to the canonical 20-field business catalogue. Drives KPIs, dashboard charts, forecasts, and reports.")
         active_df = pd.DataFrame([{
             "Column Header": item["column"],
             "Business Role": item["role"].replace("_", " ").title(),
@@ -86,16 +100,16 @@ def render_data():
         st.table(active_df)
 
     with t2:
-        st.caption("These columns are preserved intact for preview, data cleaning, and CSV exports, but excluded from financial calculations so operational attributes (like phone numbers, addresses, and line numbers) do not distort accounting metrics.")
+        st.caption("Preserved intact for data preview, cleaning, and export, but excluded from financial metrics so operational metadata does not distort accounting figures.")
         if analysis["suggested"]:
-            st.write("**Optional / Suggested Mappings:**")
+            st.markdown("##### Optional / Suggested Mappings")
             st.table(pd.DataFrame([{
                 "Column Header": item["column"],
                 "Suggested Role": item["suggested_role"].replace("_", " ").title(),
                 "Data Type": item["type"],
                 "Semantic Rationale": item["reason"]
             } for item in analysis["suggested"]]))
-            st.write("##### Quick Promotion Actions:")
+            st.markdown("##### Quick Promotion Actions")
             q_cols = st.columns(min(len(analysis["suggested"]), 3))
             for i, item in enumerate(analysis["suggested"]):
                 with q_cols[i % len(q_cols)]:
@@ -114,7 +128,7 @@ def render_data():
                         else:
                             st.error(f"Cannot promote '{col_name}': {reason}")
         if analysis["auxiliary"]:
-            st.write("**Operational & Contact Metadata:**")
+            st.markdown("##### Operational & Contact Metadata")
             st.table(pd.DataFrame([{
                 "Column Header": item["column"],
                 "Category": item["category"],
@@ -122,7 +136,8 @@ def render_data():
                 "Preservation Purpose": item["explanation"]
             } for item in analysis["auxiliary"]]))
             st.caption("Need to map an operational attribute to a business role? Use the Manual Column Mapping Studio below.")
-    with st.expander("20 supported fields · dataset requirements"):
+
+    with st.expander("20 supported fields · dataset requirements", expanded=False):
         st.write("Not all 20 are mandatory. Missing fields disable dependent features.")
         st.write("Recommended demo fields: " + ", ".join(RECOMMENDED))
         st.dataframe(pd.DataFrame([{"Field": role, "Type": details[0], "Meaning": details[1],
@@ -130,15 +145,19 @@ def render_data():
                                   for role, details in FIELDS.items()]), hide_index=True, width="stretch")
         st.caption("One row must represent one sales line item. Discount is never deducted automatically. "
                    "Reported profit is not assumed to mean gross or net profit.")
-    a,b,c = st.columns(3)
+
+    a, b, c = st.columns(3)
     a.metric("Records", len(ds["working"]))
     b.metric("Columns", len(ds["working"].columns))
     c.metric("Data version", ds["revision"])
+
     if st.button("Open automatic dashboard", type="primary"):
         st.session_state["page"] = "Dashboard"
         st.rerun()
-    with st.expander("Detected fields and interpretation log"):
+
+    with st.expander("Detected fields and interpretation log", expanded=False):
         st.dataframe(pd.DataFrame(ds["history"]), hide_index=True, width="stretch")
+
     with st.expander("Manual Column Mapping Studio & Currency", expanded=False):
         settings = ds["settings"]
         top_left, top_right = st.columns([3, 1])
@@ -157,7 +176,7 @@ def render_data():
             "Source-First Mapping (Column → Role)",
             "Catalogue-First Mapping (Role → Column)"
         ])
-        
+
         col_to_role = {v: k for k, v in settings["mapping"].items() if v}
         columns = ds["working"].columns.tolist()
 
@@ -165,7 +184,7 @@ def render_data():
             with st.form("source_first_mapping_form"):
                 st.write("##### Assign Source Columns to Business Roles")
                 st.caption("Select the appropriate catalogue role for each column in your dataset. Selecting '[Preserved as Auxiliary]' keeps the column in data preview and exports without calculating financial KPIs on it.")
-                
+
                 h1, h2, h3, h4 = st.columns([3, 3, 2, 4])
                 h1.markdown("**Column Header**")
                 h2.markdown("**Sample Preview**")
@@ -180,10 +199,10 @@ def render_data():
                     c1.markdown(f"**`{col}`**")
                     c2.caption(sample_preview(ds["working"][col]))
                     c3.caption(f"`{ds['working'][col].dtype}`")
-                    
+
                     current_role = col_to_role.get(col)
                     current_index = role_options.index(current_role) if current_role in role_options else 0
-                    
+
                     selected_source_mappings[col] = c4.selectbox(
                         f"Target role for {col}",
                         options=role_options,
@@ -284,9 +303,10 @@ def render_data():
                             settings["charts"] = suggestions(ds["working"], mappings_by_role)
                             clear_controls()
                             st.rerun()
+
     st.subheader("Data preview")
     st.dataframe(ds["working"].head(20), hide_index=True, width="stretch")
-    with st.expander("Original data (unchanged)"):
+    with st.expander("Original data (unchanged)", expanded=False):
         st.dataframe(ds["original"].head(20), hide_index=True, width="stretch")
     render_templates(ds)
     if st.button("Remove active dataset", key="remove_data"):
