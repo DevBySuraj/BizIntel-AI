@@ -63,11 +63,72 @@ All demo data is fictional. See the [learning guide](docs/LEARNING_GUIDE.md) for
 | Intelligence | Chronological forecasts, customer RFM groups, IQR anomaly investigation |
 | Reports | Scope-bound evidence, reviewed actions, final interpretation, CSV/HTML/PDF |
 
+## Project structure
+
+BizIntel AI is organized into a modular, three-tier layered architecture that separates business logic and machine learning from Streamlit presentation views:
+
+```
+BizIntel-AI/
+├── app.py                         # Application entrypoint (streamlit run app.py)
+├── app_state.py                   # Session state & dataset persistence manager
+├── requirements.txt               # Locked dependencies
+├── README.md                      # Quickstart & project guide
+├── PROJECT_PROGRESS.md            # Progress, audit & milestone log
+├── AGENTS.md                      # Engineering guidance & prompt contract
+├── .gitignore                     # Git ignore rules
+│
+├── core/                          # 🧠 Backend Analytics, Math & ML Engine (Framework-Agnostic)
+│   ├── catalogue.py               # Canonical 20-field catalogue contracts & aliases
+│   ├── csv_loader.py              # CSV & Excel (.xlsx) ingestion & byte validation
+│   ├── automation.py              # NLP tokenizer, semantic column mapping & type adaptation
+│   ├── data_cleaning.py           # Profiling, cleaning preview, and validation rules
+│   ├── analysis.py                # Analytical scope filtering, shared context & currency
+│   ├── kpi.py                     # Revenue, reported profit, margin, AOV & growth math
+│   ├── charts.py                  # Plotly chart builders & automated recommendations
+│   ├── dashboard.py               # Dashboard metric calculation & visual specifications
+│   ├── forecasting.py             # Chronological baseline & Holt-Winters forecasting
+│   ├── intelligence.py            # Advanced ML: K-Means customer segmentation & IQR anomalies
+│   ├── insights.py                # Automated narrative insights & rule-based recommendations
+│   ├── reports.py                 # PDF (ReportLab) & standalone HTML report generators
+│   ├── templates.py               # Saved customization persistence & schema validation
+│   └── demo_data.py               # Fictional multi-month demo dataset generator
+│
+├── ui/                            # 🎨 Frontend Streamlit Presentation Layer
+│   ├── ui_style.py                # Design system styling & custom CSS injection
+│   ├── ui_controls.py             # Shared filter widgets & multiselect controls
+│   ├── data_ui.py                 # Upload interface, 2-tier table & Manual Mapping Studio
+│   ├── cleaning_ui.py             # Data profiling, cleaning rules & preview actions
+│   ├── dashboard_ui.py            # Executive dashboard, KPI cards & Plotly chart grid
+│   ├── kpi_ui.py                  # Deep-dive financial KPI metrics & dimension breakdowns
+│   ├── forecasting_ui.py          # Time-series forecasting controls, metrics & charts
+│   ├── reports_ui.py              # Report builder, PDF/HTML generation & download actions
+│   └── template_ui.py             # Template save/load manager interface
+│
+├── data/                          # 📁 Sample & Reference Datasets
+│   ├── sample_sales.csv           # Baseline 8-row fictional sales dataset
+│   └── sample_sales_catalogue.csv # 20-field canonical reference dataset
+│
+├── docs/                          # 📚 Project Documentation & Learning Guides
+│   ├── ARCHITECTURE.md            # Architectural specification and layer roles
+│   ├── BIZINTEL_AI_PRD.md         # Product requirements document
+│   ├── DATA_CATALOGUE.md          # 20-field canonical schema specification
+│   ├── LEARNING_GUIDE.md          # Presentation walkthrough and defense scripts
+│   └── VERIFICATION.md            # Test evidence and acceptance logs
+│
+└── tests/                         # 🧪 Automated Test Suite (103 Tests)
+    ├── test_catalogue.py, test_csv_upload.py, test_dashboard.py,
+    ├── test_data_cleaning.py, test_forecasting.py, test_kpi.py,
+    ├── test_navigation.py, test_product.py, test_workflows.py,
+    └── ui_helpers.py, verify_exports.py
+```
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for full architectural layer contracts.
+
 ## Fixed 20-field catalogue
 
 The approved contract is in [DATA_CATALOGUE.md](docs/DATA_CATALOGUE.md).
 Data shows all 20 roles, detected mappings and columns outside analysis scope.
-Download the fictional 20-field example in Data or upload `sample_sales_catalogue.csv`.
+Download the fictional 20-field example in Data or upload `data/sample_sales_catalogue.csv`.
 Not all fields are mandatory; missing prerequisites disable dependent features.
 
 The six main cards are Sales, Reported/Gross Profit, corresponding Margin, Orders,

@@ -1,0 +1,60 @@
+# Local Python environments
+.bav5/
+.venv/
+venv/
+env/
+
+# Python bytecode and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and editor settings
+.vscode/
+.idea/
+
+# Credentials and secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+secrets/
+secrets.*
+credentials.json
+credentials.*.json
+*.pem
+*.key
+
+# Data privacy: keep user uploads local; sample datasets stay in Git
+uploads/
+private_data/
+data/templates/
+*.csv
+*.xlsx
+*.xls
+*.parquet
+!data/sample_sales.csv
+!data/sample_sales_catalogue.csv
+
+# Local logs
+*.log
+
+# Local verification artifacts, exports, and temporary outputs
+.verification/
+output/
+tmp/
+reports/
+drafts/
+
+# Internal agent instructions & progress logs
+AGENTS.md
+PROJECT_PROGRESS.md
+docs
+data
