@@ -1,0 +1,9 @@
+order_date,order_id,customer_id,segment,product_id,product_name,category,sub_category,sales,quantity,discount,profit,unit_price,unit_cost,total_cost,country,state,city,region,currency
+2026-10-01,ORD001,CUST001,Consumer,P001,Notebook,Stationery,Paper,240,3,0,105,80,45,135,India,Delhi,New Delhi,North,INR
+2026-10-01,ORD002,CUST002,Corporate,P002,Wireless Mouse,Electronics,Accessories,650,1,0,230,650,420,420,India,Karnataka,Bengaluru,South,INR
+2026-10-02,ORD003,CUST003,Consumer,P003,Water Bottle,Home,Kitchen,700,2,0,280,350,210,420,India,West Bengal,Kolkata,East,INR
+2026-10-03,ORD004,CUST001,Consumer,P004,Pen Set,Stationery,Writing,240,2,0,110,120,65,130,India,Delhi,New Delhi,North,INR
+2026-10-04,ORD005,CUST004,Corporate,P005,USB Keyboard,Electronics,Accessories,900,1,0,290,900,610,610,India,Maharashtra,Mumbai,West,INR
+2026-10-05,ORD006,CUST005,Home Office,P006,Desk Lamp,Home,Lighting,750,1,0,270,750,480,480,India,Tamil Nadu,Chennai,South,INR
+2026-10-06,ORD007,CUST002,Corporate,P001,Notebook,Stationery,Paper,400,5,0,175,80,45,225,India,Karnataka,Bengaluru,South,INR
+2026-10-07,ORD008,CUST006,Home Office,P002,Wireless Mouse,Electronics,Accessories,1300,2,0,460,650,420,840,India,Odisha,Bhubaneswar,East,INR

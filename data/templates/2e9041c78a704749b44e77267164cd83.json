@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "2e9041c78a704749b44e77267164cd83",
+  "name": "Reusable sales view",
+  "description": "",
+  "created": "2026-10-31T18:57:04.765927+00:00",
+  "updated": "2026-10-31T18:57:04.765927+00:00",
+  "settings": {
+    "cleaning_rules": [],
+    "filters": {},
+    "report": {},
+    "layout": 2,
+    "charts": [
+      {
+        "id": "2a0a4196d9f649539b72b139b9ace595",
+        "kind": "Line",
+        "x": "date",
+        "y": "@revenue",
+        "title": "Sales over time",
+        "aggregation": "sum",
+        "group": null,
+        "palette": "Teal",
+        "top_n": 12,
+        "sort": "Descending",
+        "labels": false,
+        "x_label": "",
+        "y_label": "",
+        "enabled": true
+      },
+      {
+        "id": "84463e3f52e04ebb97ccdd760b754cff",
+        "kind": "Bar",
+        "x": "category",
+        "y": "@revenue",
+        "title": "Sales by category",
+        "aggregation": "sum",
+        "group": null,
+        "palette": "Teal",
+        "top_n": 12,
+        "sort": "Descending",
+        "labels": false,
+        "x_label": "",
+        "y_label": "",
+        "enabled": true
+      },
+      {
+        "id": "396d780a272d4d85a1c1be84be4db11d",
+        "kind": "Bar",
+        "x": "region",
+        "y": "@revenue",
+        "title": "Sales by region",
+        "aggregation": "sum",
+        "group": null,
+        "palette": "Teal",
+        "top_n": 12,
+        "sort": "Descending",
+        "labels": false,
+        "x_label": "",
+        "y_label": "",
+        "enabled": true
+      }
+    ],
+    "mapping": {
+      "order_date": "date",
+      "order_id": "order_id",
+      "customer_id": "customer_id",
+      "segment": null,
+      "product_id": null,
+      "product_name": "product",
+      "category": "category",
+      "sub_category": null,
+      "sales": null,
+      "quantity": "quantity",
+      "discount": null,
+      "profit": null,
+      "unit_price": "unit_price",
+      "unit_cost": "unit_cost",
+      "total_cost": null,
+      "country": null,
+      "state": null,
+      "city": null,
+      "region": "region",
+      "currency": null
+    },
+    "models": {
+      "frequency": "M",
+      "horizon": 3,
+      "clusters": 3,
+      "iqr_multiplier": 1.5
+    },
+    "currency": "INR"
+  }
+}

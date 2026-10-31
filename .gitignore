@@ -35,13 +35,10 @@ credentials.*.json
 # Data privacy: keep user uploads local; sample datasets stay in Git
 uploads/
 private_data/
-data/templates/
 *.csv
 *.xlsx
 *.xls
 *.parquet
-!data/sample_sales.csv
-!data/sample_sales_catalogue.csv
 
 # Local logs
 *.log
@@ -57,4 +54,5 @@ drafts/
 AGENTS.md
 PROJECT_PROGRESS.md
 docs
-data
+!data/sample_sales.csv
+!data/sample_sales_catalogue.csv

@@ -1,0 +1,9 @@
+date,order_id,customer_id,product,category,quantity,unit_price,unit_cost,region
+2026-10-01,ORD001,CUST001,Notebook,Stationery,3,80.00,45.00,North
+2026-10-01,ORD002,CUST002,Wireless Mouse,Electronics,1,650.00,420.00,South
+2026-10-02,ORD003,CUST003,Water Bottle,Home,2,350.00,210.00,East
+2026-10-03,ORD004,CUST001,Pen Set,Stationery,2,120.00,65.00,North
+2026-10-04,ORD005,CUST004,USB Keyboard,Electronics,1,900.00,610.00,West
+2026-10-05,ORD006,CUST005,Desk Lamp,Home,1,750.00,480.00,South
+2026-10-06,ORD007,CUST002,Notebook,Stationery,5,80.00,45.00,South
+2026-10-07,ORD008,CUST006,Wireless Mouse,Electronics,2,650.00,420.00,East
